@@ -132,6 +132,32 @@
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
 }
 
+- (void) submitAchievement:(CDVInvokedUrlCommand*)command;
+{
+    NSMutableDictionary *args = [command.arguments objectAtIndex:0];
+    int64_t percent = [[args objectForKey:@"percent"] integerValue];
+    NSString *achievementId = [args objectForKey:@"achievementId"];
+
+    __block CDVPluginResult* pluginResult = nil;
+
+    GKAchievement *achievement = [[GKAchievement alloc] initWithIdentifier: achievementId];
+    if (achievement)
+    {
+         achievement.percentComplete = percent;
+         [achievement reportAchievementWithCompletionHandler:^(NSError *error)
+             {
+                  if (error)
+                  {
+                      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:[error localizedDescription]];
+                  }
+                  else {
+                      pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+                  }
+                  [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+             }];
+    }
+}
+
 - (void) gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController
 {
     [gameCenterViewController dismissViewControllerAnimated:YES completion:nil];

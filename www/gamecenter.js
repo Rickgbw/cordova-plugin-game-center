@@ -17,4 +17,8 @@ GameCenter.prototype.showLeaderboard = function (success, failure, data) {
     exec(success, failure, "GameCenter", "showLeaderboard", [data]);
 };
 
+GameCenter.prototype.submitAchievement = function (success, failure, data) {
+    exec(success, failure, "GameCenter", "submitAchievement", [data]);
+};
+
 module.exports = new GameCenter();
