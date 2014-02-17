@@ -25,4 +25,8 @@ GameCenter.prototype.showAchievements = function (success, failure, data) {
     exec(success, failure, "GameCenter", "showAchievements", [data]);
 };
 
+GameCenter.prototype.resetAchievements = function (success, failure, data) {
+	exec(success, failure, "GameCenter", "resetAchievements", [data]);
+};
+
 module.exports = new GameCenter();
