@@ -21,4 +21,8 @@ GameCenter.prototype.submitAchievement = function (success, failure, data) {
     exec(success, failure, "GameCenter", "submitAchievement", [data]);
 };
 
+GameCenter.prototype.showAchievements = function (success, failure, data) {
+    exec(success, failure, "GameCenter", "showAchievements", [data]);
+};
+
 module.exports = new GameCenter();

@@ -158,6 +158,25 @@
     }
 }
 
+- (void) showAchievements: (CDVInvokedUrlCommand*)command;
+{
+    CDVPluginResult* pluginResult = nil;
+
+    GKGameCenterViewController *gameCenterController = [[GKGameCenterViewController alloc] init];
+    if (gameCenterController != nil)
+    {
+        gameCenterController.gameCenterDelegate = self;
+        gameCenterController.viewState = GKGameCenterViewControllerStateAchievements;
+        [self.viewController presentViewController:gameCenterController animated:YES completion:nil];
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    }
+     else
+    {
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+    }
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
 - (void) gameCenterViewControllerDidFinish:(GKGameCenterViewController *)gameCenterViewController
 {
     [gameCenterViewController dismissViewControllerAnimated:YES completion:nil];
