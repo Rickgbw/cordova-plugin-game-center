@@ -9,6 +9,8 @@
 
 @implementation GameCenter
 
+@synthesize achievementDescriptions;
+
 - (void) auth:(CDVInvokedUrlCommand*)command;
 {
     // __weak to avoid retain cycle
@@ -26,6 +28,7 @@
             if (localPlayer.isAuthenticated)
             {
                 pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+                [self retrieveAchievmentMetadata];
             }
             else if (error != nil)
             {
@@ -193,6 +196,43 @@
              pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
          }
          [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+     }];
+}
+
+- (void) showNotification: (CDVInvokedUrlCommand*)command;
+{
+    NSMutableDictionary *args = [command.arguments objectAtIndex:0];
+    NSString *achievementId = [args objectForKey:@"achievementId"];
+    
+    CDVPluginResult* pluginResult = nil;
+    
+    GKAchievementDescription *achievementDescription = [achievementDescriptions objectForKey:achievementId];
+    
+    if(achievementDescription != nil) {
+        [GKNotificationBanner showBannerWithTitle:achievementDescription.title message:achievementDescription.achievedDescription completionHandler:nil];
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
+    } else {
+        pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR];
+    }
+    [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void) retrieveAchievmentMetadata
+{
+    achievementDescriptions = [[NSMutableDictionary alloc] init];
+    
+    [GKAchievementDescription loadAchievementDescriptionsWithCompletionHandler:
+     ^(NSArray *descriptions, NSError *error) {
+         if (error != nil)
+         {
+             NSLog(@"Error in reporting achievements: %@", error);
+         }
+         if (descriptions != nil)
+         {
+             for (GKAchievementDescription *achievementDescription in descriptions) {
+                 [achievementDescriptions setObject:achievementDescription forKey:achievementDescription.identifier];
+             }
+         }
      }];
 }
 

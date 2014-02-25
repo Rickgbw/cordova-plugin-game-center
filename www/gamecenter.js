@@ -1,4 +1,4 @@
-
+cordova.define("com.gartic.gamecenter.GameCenter", function(require, exports, module) {
 var exec = require("cordova/exec");
 
 var GameCenter = function () {
@@ -28,5 +28,10 @@ GameCenter.prototype.showAchievements = function (success, failure, data) {
 GameCenter.prototype.resetAchievements = function (success, failure, data) {
 	exec(success, failure, "GameCenter", "resetAchievements", [data]);
 };
+               
+GameCenter.prototype.showNotification = function (success, failure, data) {
+    exec(success, failure, "GameCenter", "showNotification", [data]);
+};
 
 module.exports = new GameCenter();
+});
