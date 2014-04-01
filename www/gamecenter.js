@@ -1,4 +1,3 @@
-cordova.define("com.gartic.gamecenter.GameCenter", function(require, exports, module) {
 var exec = require("cordova/exec");
 
 var GameCenter = function () {
@@ -34,4 +33,3 @@ GameCenter.prototype.showNotification = function (success, failure, data) {
 };
 
 module.exports = new GameCenter();
-});
